@@ -1,0 +1,3 @@
+api:
+    endpoint: http://openapi.data.go.kr/openapi/service/rest/Covid19/
+    name: getCovid19InfStateJson
