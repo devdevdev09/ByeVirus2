@@ -1,18 +1,22 @@
 package heo.dae.byevirus2.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
-import jdk.xml.internal.JdkXmlFeatures.XmlFeature;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 public class MainController {
@@ -26,19 +30,30 @@ public class MainController {
     String API_NAME;
 
     @RequestMapping("/test")
-    public void test(){
+    public void test() throws UnsupportedEncodingException {
         System.out.println("serviceKey : " + SERVICE_KEY);
 
         String url = END_POINT + API_NAME + "?serviceKey=" + SERVICE_KEY + "&pageNo=1&numOfRows=10&startCreateDt=20200310&endCreateDt=20200315";
 
         RestTemplate restTemplate = new RestTemplate();
-        Map<String, Object> map = new HashMap<String,Object>();
 
-        HttpEntity entity = new HttpEntity<Map<String,Object>>(map);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        ResponseEntity response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+        // UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+        // .queryParam("serviceKey", SERVICE_KEY)
+        // .queryParam("pageNo", "1")
+        // .queryParam("numOfRows", "10")
+        // .queryParam("startCreateDt", "20200310")
+        // .queryParam("endCreateDt", "20200315");
+
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+
+        // String te  = URLEncoder.encode(url, "UTF-8");
+        ResponseEntity<String> response = restTemplate.exchange(URI.create(url), HttpMethod.GET, entity, String.class);
 
         System.out.println(response);
 
     }
 }
+

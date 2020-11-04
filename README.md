@@ -7,3 +7,6 @@ OpenApi
 ### 2020-11-03
 - api 호출안됨("resultMsg":"SERVICE KEY IS NOT REGISTERED ERROR.")
 - 키는 등록했는데??
+
+### 2020-11-04
+- api 호출됨
