@@ -1,0 +1,5 @@
+
+@ConfigurationProperties
+public class testp {
+    
+}
