@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import heo.dae.byevirus2.parser.JsonParser;
+import heo.dae.byevirus2.parser.ParserService;
 
 
 @RestController
@@ -61,30 +61,35 @@ public class MainController {
     }
 
     @RequestMapping("/test")
-    public void test() throws UnsupportedEncodingException {
+    public void callApi(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd") 
+                        Date startDate,
+                        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd")
+                        Date endDate){
+        Date targetStartDate;
+        Date targetEndDate;
+        if(startDate == null || endDate == null){
+            targetStartDate = new Date();
+            targetEndDate = new Date();
+        }else{
+            targetStartDate = startDate;
+            targetEndDate = startDate;
+        }
+
         System.out.println("serviceKey : " + SERVICE_KEY);
 
-        String url = END_POINT + API_NAME + "?serviceKey=" + SERVICE_KEY + "&pageNo=1&numOfRows=10&startCreateDt=20200310&endCreateDt=20200315";
+        String url = END_POINT + API_NAME + "?serviceKey=" + SERVICE_KEY + "&pageNo=1&numOfRows=10&startCreateDt="+ targetStartDate + "&endCreateDt=" + targetEndDate;
 
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        // UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
-        // .queryParam("serviceKey", SERVICE_KEY)
-        // .queryParam("pageNo", "1")
-        // .queryParam("numOfRows", "10")
-        // .queryParam("startCreateDt", "20200310")
-        // .queryParam("endCreateDt", "20200315");
-
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
-        // String te  = URLEncoder.encode(url, "UTF-8");
         ResponseEntity<String> response = restTemplate.exchange(URI.create(url), HttpMethod.GET, entity, String.class);
         ResponseEntity<Map> map = restTemplate.getForEntity(URI.create(url), Map.class);
 
-        JsonParser jsonParser = new JsonParser();
+        ParserService jsonParser = new ParserService();
         jsonParser.getParser(response.getBody());
         System.out.println(response);
 
