@@ -2,13 +2,12 @@ package heo.dae.byevirus2.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLEncoder;
-import java.net.http.HttpResponse;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpEntity;
@@ -20,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
+
+import heo.dae.byevirus2.parser.JsonParser;
+
 
 @RestController
 public class MainController {
@@ -81,7 +82,10 @@ public class MainController {
 
         // String te  = URLEncoder.encode(url, "UTF-8");
         ResponseEntity<String> response = restTemplate.exchange(URI.create(url), HttpMethod.GET, entity, String.class);
+        ResponseEntity<Map> map = restTemplate.getForEntity(URI.create(url), Map.class);
 
+        JsonParser jsonParser = new JsonParser();
+        jsonParser.getParser(response.getBody());
         System.out.println(response);
 
     }
