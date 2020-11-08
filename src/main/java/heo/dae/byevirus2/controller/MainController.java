@@ -77,7 +77,13 @@ public class MainController {
             targetEndDate = startDate;
         }
 
-        String url = apiService.getApiUrl();
+        String url;
+        try {
+            url = apiService.getApiUrl();
+        } catch (UnsupportedEncodingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         RestTemplate restTemplate = new RestTemplate();
 
