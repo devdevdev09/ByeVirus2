@@ -34,6 +34,12 @@ public class MainController {
     @Value("${api.name}")
     String API_NAME;
 
+    ParserService parserService;
+
+    public MainController(ParserService parserService){
+        this.parserService = parserService;
+    }
+
     @RequestMapping("/date")
     public void datetest(
             @RequestParam(required = false) 
@@ -87,11 +93,14 @@ public class MainController {
         HttpEntity<?> entity = new HttpEntity<>(headers);
 
         ResponseEntity<String> response = restTemplate.exchange(URI.create(url), HttpMethod.GET, entity, String.class);
-        ResponseEntity<Map> map = restTemplate.getForEntity(URI.create(url), Map.class);
+        
+        Map<String,String> result = parserService.getParser(response.getBody());
 
         ParserService jsonParser = new ParserService();
         jsonParser.getParser(response.getBody());
         System.out.println(response);
+
+        System.out.println(result);
 
     }
 }
