@@ -2,6 +2,7 @@ package heo.dae.byevirus2.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -19,25 +20,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import heo.dae.byevirus2.parser.ParserService;
+import heo.dae.byevirus2.service.ApiService;
 
 
 @RestController
 public class MainController {
-    @Value("${service.key}")
-    public String SERVICE_KEY;
+    private ParserService parserService;
+    private ApiService apiService;
 
-    @Value("${api.endpoint}")
-    String END_POINT;
-
-    @Value("${api.name}")
-    String API_NAME;
-
-    ParserService parserService;
-
-    public MainController(ParserService parserService){
+    public MainController(ParserService parserService, ApiService apiService){
         this.parserService = parserService;
+        this.apiService = apiService;
     }
 
     @RequestMapping("/date")
@@ -81,9 +77,7 @@ public class MainController {
             targetEndDate = startDate;
         }
 
-        System.out.println("serviceKey : " + SERVICE_KEY);
-
-        String url = END_POINT + API_NAME + "?serviceKey=" + SERVICE_KEY + "&pageNo=1&numOfRows=10&startCreateDt="+ targetStartDate + "&endCreateDt=" + targetEndDate;
+        String url = apiService.getApiUrl();
 
         RestTemplate restTemplate = new RestTemplate();
 
