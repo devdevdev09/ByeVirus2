@@ -24,16 +24,20 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import heo.dae.byevirus2.parser.ParserService;
 import heo.dae.byevirus2.service.ApiService;
+import heo.dae.byevirus2.service.XmlService;
+import heo.dae.byevirus2.vo.Response;
 
 
 @RestController
 public class MainController {
     private ParserService parserService;
     private ApiService apiService;
+    private XmlService xmlService;
 
-    public MainController(ParserService parserService, ApiService apiService){
+    public MainController(ParserService parserService, ApiService apiService, XmlService xmlService){
         this.parserService = parserService;
         this.apiService = apiService;
+        this.xmlService = xmlService;
     }
 
     @RequestMapping("/date")
@@ -62,6 +66,11 @@ public class MainController {
 
     }
 
+    @RequestMapping("/xml")
+    public void xml(){
+        xmlService.parser("");
+    }
+
     @RequestMapping("/test")
     public void callApi(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd") 
                         Date startDate,
@@ -77,7 +86,7 @@ public class MainController {
             targetEndDate = startDate;
         }
 
-        String url;
+        String url = "";
         try {
             url = apiService.getApiUrl();
         } catch (UnsupportedEncodingException e) {
@@ -94,13 +103,9 @@ public class MainController {
 
         ResponseEntity<String> response = restTemplate.exchange(URI.create(url), HttpMethod.GET, entity, String.class);
         
-        Map<String,String> result = parserService.getParser(response.getBody());
+        Response responseXml = xmlService.parser(response.getBody());
 
-        ParserService jsonParser = new ParserService();
-        jsonParser.getParser(response.getBody());
-        System.out.println(response);
-
-        System.out.println(result);
+        System.out.println(responseXml);
 
     }
 }

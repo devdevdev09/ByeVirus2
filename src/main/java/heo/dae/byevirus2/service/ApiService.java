@@ -19,15 +19,15 @@ public class ApiService {
     String API_NAME;
 
     public String getApiUrl() throws UnsupportedEncodingException {
-        String url = END_POINT + API_NAME;
+        String url = END_POINT + API_NAME + "?serviceKey=" + SERVICE_KEY + "&pageNo=1&numOfRows=10&startCreateDt=20200310&endCreateDt=20200315";
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromPath(url)
-        .queryParam("serviceKey", URLEncoder.encode(SERVICE_KEY, "UTF-8"))
+        .queryParam("", URLEncoder.encode(SERVICE_KEY,"UTF-8"))
         .queryParam("pageNo", "1")
         .queryParam("numOfRows", "10")
         .queryParam("startCreateDt", "20200310")
         .queryParam("endCreateDt", "20200315");
 
-        return "Test";
+        return url;
     }
 }
