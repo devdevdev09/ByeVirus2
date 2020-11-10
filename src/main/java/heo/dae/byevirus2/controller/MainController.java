@@ -72,9 +72,12 @@ public class MainController {
     }
 
     @RequestMapping("/test")
-    public void callApi(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd") 
-                        Date startDate,
-                        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd")
+    public void callApi(@RequestParam(required = false) 
+                        @DateTimeFormat(pattern = "yyyyMMdd") 
+                        Date startDate
+                        
+                        ,@RequestParam(required = false) 
+                        @DateTimeFormat(pattern = "yyyyMMdd")
                         Date endDate){
         Date targetStartDate;
         Date targetEndDate;
@@ -86,13 +89,7 @@ public class MainController {
             targetEndDate = startDate;
         }
 
-        String url = "";
-        try {
-            url = apiService.getApiUrl();
-        } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        String url = apiService.getApiUrl(targetStartDate, targetEndDate);
 
         RestTemplate restTemplate = new RestTemplate();
 

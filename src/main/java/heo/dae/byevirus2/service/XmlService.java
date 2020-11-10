@@ -15,7 +15,7 @@ public class XmlService {
         ObjectMapper xmlMapper = new XmlMapper();
         Response response = null;
         try {
-            response = xmlMapper.readValue("<response><header><resultCode>00</resultCode><resultMsg>NORMAL SERVICE.</resultMsg></header><body><items><item><accDefRate>3.9193080566</accDefRate><accExamCnt>210144</accExamCnt><accExamCompCnt>191692</accExamCompCnt><careCnt>7212</careCnt><clearCnt>247</clearCnt><createDt>2020-03-10 10:20:27.27</createDt><deathCnt>54</deathCnt><decideCnt>7513</decideCnt><examCnt>18452</examCnt><resutlNegCnt>184179</resutlNegCnt><seq>69</seq><stateDt>20200310</stateDt><stateTime>00:00</stateTime><updateDt></updateDt></item></items><numOfRows>10</numOfRows><pageNo>1</pageNo><totalCount>1</totalCount></body></response>", Response.class);
+            response = xmlMapper.readValue(xml, Response.class);
         } catch (JsonMappingException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

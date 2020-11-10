@@ -1,11 +1,10 @@
 package heo.dae.byevirus2.service;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class ApiService {
@@ -18,15 +17,13 @@ public class ApiService {
     @Value("${api.name}")
     String API_NAME;
 
-    public String getApiUrl() throws UnsupportedEncodingException {
-        String url = END_POINT + API_NAME + "?serviceKey=" + SERVICE_KEY + "&pageNo=1&numOfRows=10&startCreateDt=20200310&endCreateDt=20200315";
+    public String getApiUrl(Date targetStartDate, Date targetEndDate) {
 
-        UriComponentsBuilder builder = UriComponentsBuilder.fromPath(url)
-        .queryParam("", URLEncoder.encode(SERVICE_KEY,"UTF-8"))
-        .queryParam("pageNo", "1")
-        .queryParam("numOfRows", "10")
-        .queryParam("startCreateDt", "20200310")
-        .queryParam("endCreateDt", "20200315");
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        String startDate = format.format(targetStartDate);
+        String endDate = format.format(targetEndDate);
+        
+        String url = END_POINT + API_NAME + "?serviceKey=" + SERVICE_KEY + "&pageNo=1&numOfRows=10&startCreateDt=" + startDate + "&endCreateDt=" + endDate;
 
         return url;
     }
