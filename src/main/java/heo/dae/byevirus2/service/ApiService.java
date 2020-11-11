@@ -17,13 +17,19 @@ public class ApiService {
     @Value("${api.name}")
     String API_NAME;
 
-    public String getApiUrl(Date targetStartDate, Date targetEndDate) {
+    public String getApiUrl(Date targetStartDate
+                          , Date targetEndDate
+                          , String pageNo
+                          , String numOfRows) {
 
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
         String startDate = format.format(targetStartDate);
         String endDate = format.format(targetEndDate);
         
-        String url = END_POINT + API_NAME + "?serviceKey=" + SERVICE_KEY + "&pageNo=1&numOfRows=10&startCreateDt=" + startDate + "&endCreateDt=" + endDate;
+        String url = END_POINT + API_NAME 
+                    + "?serviceKey=" + SERVICE_KEY + "&pageNo=" + pageNo 
+                    + "&numOfRows="+ numOfRows + "&startCreateDt=" + startDate 
+                    + "&endCreateDt=" + endDate;
 
         return url;
     }
