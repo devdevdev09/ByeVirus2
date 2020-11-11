@@ -1,5 +1,5 @@
 # ByeVirus2
-OpenApi 
+- 보건복지부_코로나19 감염현황 > [API 상세](https://www.data.go.kr/data/15043376/openapi.do)
 
 ### 2020-11-01
 - open api 신청
@@ -19,3 +19,6 @@ OpenApi
 
 ### 2020-11-10
 - 날짜별 데이터 호출 성공
+
+### 2020-11-11
+- 코드 정리

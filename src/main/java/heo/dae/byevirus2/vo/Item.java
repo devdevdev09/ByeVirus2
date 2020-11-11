@@ -1,5 +1,8 @@
 package heo.dae.byevirus2.vo;
 
+import lombok.Data;
+
+@Data
 public class Item {
     public double accDefRate;
     public int accExamCnt;

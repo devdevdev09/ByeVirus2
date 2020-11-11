@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import heo.dae.byevirus2.service.ApiService;
 import heo.dae.byevirus2.service.XmlService;
+import heo.dae.byevirus2.vo.Item;
 import heo.dae.byevirus2.vo.Response;
 
 
@@ -71,7 +72,9 @@ public class MainController {
         
         Response responseXml = xmlService.parser(response.getBody());
 
-        System.out.println(responseXml);
+        for(Item item : responseXml.body.items){
+            System.out.println(item.toString());    
+        }
     }
 
     @RequestMapping("/date")
