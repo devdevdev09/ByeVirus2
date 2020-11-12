@@ -9,4 +9,5 @@ public class Byevirus2Application {
 	public static void main(String[] args) {
 		SpringApplication.run(Byevirus2Application.class, args);
 	}
+	
 }
