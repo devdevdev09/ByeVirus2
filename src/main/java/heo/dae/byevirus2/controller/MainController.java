@@ -1,7 +1,6 @@
 package heo.dae.byevirus2.controller;
 
 import java.net.URI;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,6 +22,7 @@ import heo.dae.byevirus2.vo.Response;
 
 
 @RestController
+@RequestMapping("/api")
 public class MainController {
     private ApiService apiService;
     private XmlService xmlService;
@@ -75,26 +75,6 @@ public class MainController {
         for(Item item : responseXml.body.items){
             System.out.println(item.toString());    
         }
-    }
-
-    @RequestMapping("/date")
-    public void datetest(@RequestParam(required = false) 
-                         @DateTimeFormat(pattern = "yyyy-MM-dd")
-                         final Date startDate
-            
-                        ,@RequestParam(required = false) 
-                         @DateTimeFormat(pattern = "yyyy-MM-dd")
-                        final Date endDate){
-            if(startDate != null && endDate != null){
-            
-            }else{
-                Date yester = new Date();
-                Calendar c = Calendar.getInstance();
-                c.setTime(yester);
-                c.add(Calendar.DAY_OF_YEAR, -1);
-                System.out.println("startdate : " + c.getTime());
-                System.out.println("enddate : " + c.getTime());
-            }
     }
 }
 
