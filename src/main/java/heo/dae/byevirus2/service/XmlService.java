@@ -17,10 +17,8 @@ public class XmlService {
         try {
             response = xmlMapper.readValue(xml, Response.class);
         } catch (JsonMappingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (JsonProcessingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return response;
