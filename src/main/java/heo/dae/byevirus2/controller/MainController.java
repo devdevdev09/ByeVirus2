@@ -33,7 +33,7 @@ public class MainController {
     }
 
     @GetMapping("/virus")
-    public void callApi(@RequestParam(required = false) 
+    public Response callApi(@RequestParam(required = false) 
                         @DateTimeFormat(pattern = "yyyyMMdd") 
                         Date startDate
                         
@@ -72,9 +72,7 @@ public class MainController {
         
         Response responseXml = xmlService.parser(response.getBody());
 
-        for(Item item : responseXml.body.items){
-            System.out.println(item.toString());    
-        }
+        return responseXml;
     }
 }
 
