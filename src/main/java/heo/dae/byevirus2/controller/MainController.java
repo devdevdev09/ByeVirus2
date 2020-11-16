@@ -2,6 +2,8 @@ package heo.dae.byevirus2.controller;
 
 import java.net.URI;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpEntity;
@@ -16,20 +18,23 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import heo.dae.byevirus2.service.ApiService;
+import heo.dae.byevirus2.service.SlackService;
 import heo.dae.byevirus2.service.XmlService;
-import heo.dae.byevirus2.vo.Item;
 import heo.dae.byevirus2.vo.Response;
 
 
 @RestController
 @RequestMapping("/api")
 public class MainController {
-    private ApiService apiService;
-    private XmlService xmlService;
+    private final ApiService apiService;
+    private final XmlService xmlService;
+    private final SlackService slackService;
 
-    public MainController(ApiService apiService, XmlService xmlService){
+    public MainController(ApiService apiService, XmlService xmlService
+                         ,SlackService slackService){
         this.apiService = apiService;
         this.xmlService = xmlService;
+        this.slackService = slackService;
     }
 
     @GetMapping("/virus")
@@ -71,6 +76,11 @@ public class MainController {
         ResponseEntity<String> response = restTemplate.exchange(URI.create(url), HttpMethod.GET, entity, String.class);
         
         Response responseXml = xmlService.parser(response.getBody());
+
+        System.out.println(responseXml.body.toString());
+        System.out.println(responseXml.body.numOfRows);
+
+        slackService.sendMsg(responseXml);
 
         return responseXml;
     }
