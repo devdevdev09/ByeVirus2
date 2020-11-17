@@ -1,10 +1,12 @@
 package heo.dae.byevirus2.service;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -20,14 +22,19 @@ public class SlackService {
         
         RestTemplate restTemplate = new RestTemplate();
 
-        Map<String,Object> request = new HashMap<String,Object>();
-        request.put("username", "virus2");
-        request.put("text", response.body.toString());
-
-        HttpEntity<Map<String,Object>> entity = new HttpEntity<Map<String,Object>>(request);
+        Map<String,Object> req = new HashMap<String,Object>();
+        req.put("text", "test");
+        req.put("username", "virus2");
+        try {
+            HttpEntity<Map<String,Object>> entity = new HttpEntity<Map<String,Object>>(req);
                     
-        String url = SLACK_URL;
+            String url = SLACK_URL;
+            URI uri = URI.create(url);
+            restTemplate.postForLocation(uri, req);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
 
-        restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+
     }
 }

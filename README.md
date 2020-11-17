@@ -28,3 +28,7 @@
 
 ### 2020-11-16
 - slack msg 보내는중....?
+
+### 2020-11-17
+- error : org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad Request: [invalid_payload]
+- 뭐야야야야야야야
