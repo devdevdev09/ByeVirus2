@@ -32,3 +32,6 @@
 ### 2020-11-17
 - error : org.springframework.web.client.HttpClientErrorException$BadRequest: 400 Bad Request: [invalid_payload]
 - 뭐야야야야야야야
+
+### 2020-11-18
+- resttemplate error????
