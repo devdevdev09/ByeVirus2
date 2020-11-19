@@ -66,20 +66,27 @@ public class MainController {
 
         String url = apiService.getApiUrl(targetStartDate, targetEndDate, pageNo, numOfRows);
 
+                // Response responseXml = xmlService.parser(response.getBody());
+                Response responseXml = null;
+                // System.out.println(responseXml.body.toString());
+                // System.out.println(responseXml.body.numOfRows);
+        
+                try{
+                    slackService.sendMsg(responseXml, SLACK_URL);
+                }catch(Exception e){
+        
+                }
+
         ResponseEntity<String> response = null;
         try {
-            response = restUtil.get(url);
+            // response = restUtil.get(url);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         
-        Response responseXml = xmlService.parser(response.getBody());
 
-        System.out.println(responseXml.body.toString());
-        System.out.println(responseXml.body.numOfRows);
-
-        slackService.sendMsg(responseXml, SLACK_URL);
+        
 
         return responseXml;
     }

@@ -77,43 +77,4 @@ public class RestUtil{
         URI uri = URI.create(url);
         restTemplate().postForLocation(uri, req);
     }
-
-    /**
-     * 
-     * @param <T>
-     * @param url
-     * @param req
-     * @param type
-     * @return api 호출 결과 상태 반환
-     * @throws Exception
-     */
-    public <T> int post(String url, Map<String, String> body, HttpHeaders headers) throws Exception {
-        HttpEntity<Map<String, String>> entity = new HttpEntity<Map<String, String>>(body, headers);
-
-        ResponseEntity<String> response = restTemplate().exchange(url, HttpMethod.POST, entity, String.class);
-
-        int status = response.getStatusCodeValue();
-
-        return status;
-    }
-
-    // x-www-urlencoded
-    public <T> int post2(String url, Map<String, Object> body, HttpHeaders headers) throws Exception {
-        MultiValueMap<String, Object> form = new LinkedMultiValueMap<String, Object>();
-
-        Map<String, String> map = new HashMap<String, String>();
-        map.put("object_type", "text");
-        map.put("text", "text");
-        map.put("object_type", "text");
-
-        form.add("template_object", map);
-
-        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<MultiValueMap<String, Object>>(form, headers);
-
-        restTemplate().postForLocation(url, entity);
-
-        return 1;
-    }
-
-
 }
