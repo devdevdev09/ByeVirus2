@@ -1,6 +1,7 @@
 package heo.dae.byevirus2.service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -17,14 +18,13 @@ public class ApiService {
     @Value("${api.name}")
     String API_NAME;
 
-    public String getApiUrl(Date targetStartDate
-                          , Date targetEndDate
+    public String getApiUrl(LocalDate targetStartDate
+                          , LocalDate targetEndDate
                           , String pageNo
                           , String numOfRows) {
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-        String startDate = format.format(targetStartDate);
-        String endDate = format.format(targetEndDate);
+        String startDate = targetStartDate.getYear() + "" + targetStartDate.getMonthValue() + "" + targetStartDate.getDayOfMonth();
+        String endDate = targetStartDate.getYear() + "" + targetStartDate.getMonthValue() + "" + targetStartDate.getDayOfMonth();
         
         String url = END_POINT + API_NAME 
                     + "?serviceKey=" + SERVICE_KEY + "&pageNo=" + pageNo 

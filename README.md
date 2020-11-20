@@ -1,6 +1,10 @@
 # ByeVirus2
 - 보건복지부_코로나19 감염현황 > [API 상세](https://www.data.go.kr/data/15043376/openapi.do)
 
+## TODO
+- 소스 정리
+- 이틀전, 전날 데이터 비교하기
+
 ### 2020-11-01
 - open api 신청
 
@@ -35,3 +39,6 @@
 
 ### 2020-11-18
 - resttemplate error????
+
+### 2020-11-21
+- invaid_payload는 header를 추가해서 해결

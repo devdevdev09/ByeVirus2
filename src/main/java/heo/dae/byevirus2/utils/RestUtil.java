@@ -75,6 +75,9 @@ public class RestUtil{
     
     public <T> void post(String url, HttpMethod method, Map<String,String> req) throws Exception {
         URI uri = URI.create(url);
-        restTemplate().postForLocation(uri, req);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity entity = new HttpEntity<>(req, headers);
+        restTemplate().postForLocation(uri, entity);
     }
 }
