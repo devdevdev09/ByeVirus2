@@ -22,10 +22,9 @@ public class Slack {
 
     public void send(String msg, String hooks){
         try {
-            Map<String, Object> req = new HashMap<String, Object>();
-            // req.put("text"    , msg);
-            // req.put("username", USER_NAME);
-            req.put("text", "tetetetet");
+            Map<String, String> req = new HashMap<String, String>();
+            req.put("text"    , msg);
+            req.put("username", USER_NAME);
             String url = hooks;
 
             restClientUtil.post(url, HttpMethod.POST, req);

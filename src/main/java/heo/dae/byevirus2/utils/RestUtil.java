@@ -73,7 +73,7 @@ public class RestUtil{
     }
 
     
-    public <T> void post(String url, HttpMethod method, Map<String,Object> req) throws Exception {
+    public <T> void post(String url, HttpMethod method, Map<String,String> req) throws Exception {
         URI uri = URI.create(url);
         restTemplate().postForLocation(uri, req);
     }
