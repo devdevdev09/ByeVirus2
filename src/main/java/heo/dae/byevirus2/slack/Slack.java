@@ -1,14 +1,16 @@
 package heo.dae.byevirus2.slack;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import heo.dae.byevirus2.utils.RestUtil;
 
@@ -16,21 +18,21 @@ import heo.dae.byevirus2.utils.RestUtil;
 public class Slack {
 
     @Autowired
-    RestUtil restClientUtil;
+    RestUtil restUtil;
 
-    String USER_NAME = "DailyCommit";
+    @Value("${slack.value.username}")
+    String USER_NAME;
 
-    public void send(String msg, String hooks){
+    @Value("${slack.value.hooks}")
+    String SLACK_HOOKS;
+
+    public void send(String msg){
         try {
-            Map<String, String> req = new HashMap<String, String>();
+            Map<String, Object> req = new HashMap<String, Object>();
             req.put("text"    , msg);
             req.put("username", USER_NAME);
-            String url = hooks;
 
-            restClientUtil.post(url, HttpMethod.POST, req);
-
-        } catch (IOException e) {
-            System.out.println(e.toString());
+            restUtil.post(SLACK_HOOKS, req);
         } catch (Exception e) {
             System.out.println(e.toString());
         }

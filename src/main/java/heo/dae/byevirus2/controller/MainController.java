@@ -2,14 +2,10 @@ package heo.dae.byevirus2.controller;
 
 import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import heo.dae.byevirus2.service.ApiService;
+import heo.dae.byevirus2.service.SlackService;
 import heo.dae.byevirus2.service.XmlService;
 import heo.dae.byevirus2.utils.RestUtil;
 import heo.dae.byevirus2.vo.Response;
@@ -26,26 +23,22 @@ import heo.dae.byevirus2.vo.Response;
 public class MainController {
     private ApiService apiService;
     private XmlService xmlService;
+    private SlackService slackService;
 
     @Autowired
     RestUtil restUtil;
 
-    @Value("${slack.value.hooks}")
-    String SLACK_URL;
-
-    public MainController(ApiService apiService, XmlService xmlService) {
+    public MainController(ApiService apiService, XmlService xmlService, SlackService slackService) {
         this.apiService = apiService;
         this.xmlService = xmlService;
+        this.slackService = slackService;
     }
 
     @GetMapping("/virus")
-    public Response callApi(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd") LocalDate startDate
-
-            , @RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd") LocalDate endDate
-
-            , @RequestParam(required = false, defaultValue = "1") String pageNo
-
-            , @RequestParam(required = false, defaultValue = "10") String numOfRows) {
+    public ResponseEntity<HttpStatus> callApi(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd") 
+                            LocalDate startDate
+                          , @RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd") 
+                            LocalDate endDate) {
 
         LocalDate targetStartDate;
         LocalDate targetEndDate;
@@ -64,30 +57,15 @@ public class MainController {
             targetEndDate = endDate;
         }
 
-        String url = apiService.getApiUrl(targetStartDate, targetEndDate, pageNo, numOfRows);
+        String url = apiService.getApiUrl(targetStartDate, targetEndDate);
+        ResponseEntity<String> response = restUtil.get(url);
+        Response responseXml = xmlService.parser(response.getBody());
 
-        ResponseEntity<String> response = null;
-        Response responseXml = null;
-        try {
-            response = restUtil.get(url);
-            responseXml = xmlService.parser(response.getBody());
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        String msg = xmlService.getSlackMsg(responseXml);
 
-        Map<String, String> req = new HashMap<String, String>();
-        req.put("username", "byeVirus2");
-        req.put("text", responseXml.getBody().toString());
+        slackService.sendMsg(msg);
 
-        try {
-            restUtil.post(SLACK_URL, HttpMethod.POST, req);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        return responseXml;
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
 

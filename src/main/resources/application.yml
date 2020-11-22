@@ -8,3 +8,4 @@ api:
 slack:
     value:
         hooks: ${slack.value.hooks}
+        username: ByeVirus2

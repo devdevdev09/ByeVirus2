@@ -19,16 +19,14 @@ public class ApiService {
     String API_NAME;
 
     public String getApiUrl(LocalDate targetStartDate
-                          , LocalDate targetEndDate
-                          , String pageNo
-                          , String numOfRows) {
+                          , LocalDate targetEndDate) {
 
         String startDate = targetStartDate.getYear() + "" + targetStartDate.getMonthValue() + "" + targetStartDate.getDayOfMonth();
-        String endDate = targetStartDate.getYear() + "" + targetStartDate.getMonthValue() + "" + targetStartDate.getDayOfMonth();
+        String endDate = targetEndDate.getYear() + "" + targetEndDate.getMonthValue() + "" + targetEndDate.getDayOfMonth();
         
         String url = END_POINT + API_NAME 
-                    + "?serviceKey=" + SERVICE_KEY + "&pageNo=" + pageNo 
-                    + "&numOfRows="+ numOfRows + "&startCreateDt=" + startDate 
+                    + "?serviceKey=" + SERVICE_KEY 
+                    + "&startCreateDt=" + startDate 
                     + "&endCreateDt=" + endDate;
 
         return url;

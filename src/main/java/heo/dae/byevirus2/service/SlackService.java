@@ -3,7 +3,6 @@ package heo.dae.byevirus2.service;
 import org.springframework.stereotype.Service;
 
 import heo.dae.byevirus2.slack.Slack;
-import heo.dae.byevirus2.vo.Response;
 
 @Service
 public class SlackService {
@@ -14,9 +13,7 @@ public class SlackService {
         this.slack = slack;
     }
 
-    public void sendMsg(Response response, String SLACK_URL) {
-        String url = SLACK_URL;
-
-        slack.send(url, url);
+    public void sendMsg(String msg) {
+        slack.send(msg);
     }
 }
