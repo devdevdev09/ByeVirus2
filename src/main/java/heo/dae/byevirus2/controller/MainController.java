@@ -1,8 +1,9 @@
 package heo.dae.byevirus2.controller;
 
 import java.time.LocalDate;
-import java.util.Calendar;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -12,15 +13,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import heo.dae.byevirus2.code.Errors;
 import heo.dae.byevirus2.service.ApiService;
 import heo.dae.byevirus2.service.SlackService;
 import heo.dae.byevirus2.service.XmlService;
 import heo.dae.byevirus2.utils.RestUtil;
+import heo.dae.byevirus2.vo.Body;
 import heo.dae.byevirus2.vo.Response;
 
 @RestController
 @RequestMapping("/api")
 public class MainController {
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+    
     private ApiService apiService;
     private XmlService xmlService;
     private SlackService slackService;
@@ -35,7 +40,7 @@ public class MainController {
     }
 
     @GetMapping("/virus")
-    public ResponseEntity<HttpStatus> callApi(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd") 
+    public <T> ResponseEntity<?> callApi(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd") 
                             LocalDate startDate
                           , @RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd") 
                             LocalDate endDate) {
@@ -46,11 +51,7 @@ public class MainController {
         LocalDate localDate = LocalDate.now();
 
         if (startDate == null || endDate == null) {
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DATE, -1);
             targetStartDate = localDate.plusDays(-3);
-
-            cal.add(Calendar.DATE, -2);
             targetEndDate = localDate.plusDays(-1);
         } else {
             targetStartDate = startDate;
@@ -58,8 +59,17 @@ public class MainController {
         }
 
         String url = apiService.getApiUrl(targetStartDate, targetEndDate);
-        ResponseEntity<String> response = restUtil.get(url);
-        Response responseXml = xmlService.parser(response.getBody());
+        
+        ResponseEntity<String> responseEntity = restUtil.get(url);
+        
+        // String response = responseEntity.getBody();
+
+        // if(Errors.SERVICE_KET_NOT_REGISTERED.code.equals(response.header.resultCode)){
+        //     System.out.println("Bad request");
+        //     return new ResponseEntity<>(Errors.SERVICE_KET_NOT_REGISTERED.msg, HttpStatus.BAD_REQUEST);
+        // }
+
+        Response responseXml = xmlService.parser(responseEntity.getBody());
 
         String msg = xmlService.getSlackMsg(responseXml);
 

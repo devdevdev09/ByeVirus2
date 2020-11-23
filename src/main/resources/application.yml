@@ -9,3 +9,7 @@ slack:
     value:
         hooks: ${slack.value.hooks}
         username: ByeVirus2
+
+logging:
+    file:
+        name: /log/202011/ByeVirus2.log

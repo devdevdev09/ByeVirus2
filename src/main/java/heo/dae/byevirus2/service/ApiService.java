@@ -4,11 +4,18 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
+import org.apache.http.client.utils.URIBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class ApiService {
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+    
     @Value("${service.key}")
     public String SERVICE_KEY;
 
@@ -28,7 +35,7 @@ public class ApiService {
                     + "?serviceKey=" + SERVICE_KEY 
                     + "&startCreateDt=" + startDate 
                     + "&endCreateDt=" + endDate;
-
+        
         return url;
     }
 }
