@@ -51,8 +51,8 @@ public class MainController {
         LocalDate localDate = LocalDate.now();
 
         if (startDate == null || endDate == null) {
-            targetStartDate = localDate.plusDays(-3);
-            targetEndDate = localDate.plusDays(-1);
+            targetStartDate = localDate.plusDays(-1);
+            targetEndDate = localDate.plusDays(0);
         } else {
             targetStartDate = startDate;
             targetEndDate = endDate;
