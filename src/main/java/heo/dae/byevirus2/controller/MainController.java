@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +41,7 @@ public class MainController {
     }
 
     @GetMapping("/virus")
-    public <T> ResponseEntity<?> callApi(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd") 
+    public ResponseEntity<Response> callApi(@RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd") 
                             LocalDate startDate
                           , @RequestParam(required = false) @DateTimeFormat(pattern = "yyyyMMdd") 
                             LocalDate endDate) {
@@ -68,6 +69,29 @@ public class MainController {
         //     System.out.println("Bad request");
         //     return new ResponseEntity<>(Errors.SERVICE_KET_NOT_REGISTERED.msg, HttpStatus.BAD_REQUEST);
         // }
+
+        Response responseXml = xmlService.parser(responseEntity.getBody());
+
+        // String msg = xmlService.getSlackMsg(responseXml);
+
+        // slackService.sendMsg(msg);
+
+        return new ResponseEntity<Response>(responseXml, HttpStatus.OK);
+    }
+
+    @PostMapping("/virus")
+    public <T> ResponseEntity<?> callApi() {
+        LocalDate targetStartDate;
+        LocalDate targetEndDate;
+
+        LocalDate localDate = LocalDate.now();
+
+        targetStartDate = localDate.plusDays(-1);
+        targetEndDate = localDate.plusDays(0);
+
+        String url = apiService.getApiUrl(targetStartDate, targetEndDate);
+        
+        ResponseEntity<String> responseEntity = restUtil.get(url);
 
         Response responseXml = xmlService.parser(responseEntity.getBody());
 
