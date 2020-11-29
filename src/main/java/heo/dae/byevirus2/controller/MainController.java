@@ -14,12 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import heo.dae.byevirus2.code.Errors;
 import heo.dae.byevirus2.service.ApiService;
 import heo.dae.byevirus2.service.SlackService;
 import heo.dae.byevirus2.service.XmlService;
 import heo.dae.byevirus2.utils.RestUtil;
-import heo.dae.byevirus2.vo.Body;
 import heo.dae.byevirus2.vo.Response;
 
 @RestController
@@ -62,19 +60,8 @@ public class MainController {
         String url = apiService.getApiUrl(targetStartDate, targetEndDate);
         
         ResponseEntity<String> responseEntity = restUtil.get(url);
-        
-        // String response = responseEntity.getBody();
-
-        // if(Errors.SERVICE_KET_NOT_REGISTERED.code.equals(response.header.resultCode)){
-        //     System.out.println("Bad request");
-        //     return new ResponseEntity<>(Errors.SERVICE_KET_NOT_REGISTERED.msg, HttpStatus.BAD_REQUEST);
-        // }
 
         Response responseXml = xmlService.parser(responseEntity.getBody());
-
-        // String msg = xmlService.getSlackMsg(responseXml);
-
-        // slackService.sendMsg(msg);
 
         return new ResponseEntity<Response>(responseXml, HttpStatus.OK);
     }
