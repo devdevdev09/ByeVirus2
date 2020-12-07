@@ -1,6 +1,7 @@
 package heo.dae.byevirus2.service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +24,8 @@ public class ApiService {
     public String getApiUrl(LocalDate targetStartDate
                           , LocalDate targetEndDate) {
 
-        String startDate = targetStartDate.getYear() + "" + targetStartDate.getMonthValue() + "" + targetStartDate.getDayOfMonth();
-        String endDate = targetEndDate.getYear() + "" + targetEndDate.getMonthValue() + "" + targetEndDate.getDayOfMonth();
+        String startDate = targetStartDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String endDate = targetEndDate.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         
         String url = END_POINT + API_NAME 
                     + "?serviceKey=" + SERVICE_KEY 

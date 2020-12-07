@@ -1,6 +1,7 @@
 package heo.dae.byevirus2.slack;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class Slack {
     String USER_NAME;
 
     @Value("${slack.value.hooks}")
-    String SLACK_HOOKS;
+    List<String> SLACK_HOOKS;
 
     public void send(String msg){
         try {
@@ -27,7 +28,9 @@ public class Slack {
             req.put("text"    , msg);
             req.put("username", USER_NAME);
 
-            restUtil.post(SLACK_HOOKS, req);
+            for(String hook : SLACK_HOOKS){
+                restUtil.post(hook, req);
+            }
         } catch (Exception e) {
             System.out.println(e.toString());
         }
