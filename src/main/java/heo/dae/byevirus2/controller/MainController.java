@@ -68,17 +68,7 @@ public class MainController {
 
     @PostMapping("/virus")
     public <T> ResponseEntity<?> callApi() {
-        LocalDate targetStartDate;
-        LocalDate targetEndDate;
-
-        LocalDate localDate = LocalDate.now();
-
-        targetStartDate = localDate.plusDays(-1);
-        targetEndDate = localDate.plusDays(0);
-
-        String url = apiService.getApiUrl(targetStartDate, targetEndDate);
-        
-        ResponseEntity<String> responseEntity = restUtil.get(url);
+        ResponseEntity<String> responseEntity = apiService.callApi();
 
         Response responseXml = xmlService.parser(responseEntity.getBody());
 

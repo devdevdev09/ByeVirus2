@@ -30,17 +30,27 @@ public class XmlService {
     }
 
     public String getSlackMsg(Response response){
-        Item item1 = response.getBody().items.get(0);
-        Item item2 = response.getBody().items.get(1);
+        String msg = "";
+        
+        try{
+            if(response.getBody().items.size() < 2){
+                throw new Exception("no update");
+            }
 
-        int plusCnt = item1.decideCnt - item2.decideCnt;
-        String date = item1.createDt;
-        double percent = Math.round(item1.accDefRate*100)/100.0;
+            Item item1 = response.getBody().items.get(0);
+            Item item2 = response.getBody().items.get(1);
 
-        String msg = "[" + date + "] : 전체 확진 : " + item1.decideCnt 
-        + ", 격리 해제 : " + item1.clearCnt + ", 사망 :" + item1.deathCnt 
-        + ", 증감 : " + plusCnt + ", 검사 진행 : " + item1.examCnt 
-        + ", 확진률 : " + percent;
+            int plusCnt = item1.decideCnt - item2.decideCnt;
+            String date = item1.createDt;
+            double percent = Math.round(item1.accDefRate*100)/100.0;
+
+            msg = "[" + date + "] : 전체 확진 : " + item1.decideCnt 
+            + ", 격리 해제 : " + item1.clearCnt + ", 사망 :" + item1.deathCnt 
+            + ", 증감 : " + plusCnt + ", 검사 진행 : " + item1.examCnt 
+            + ", 확진률 : " + percent;
+        }catch(Exception e){
+            logger.info("slack error");
+        }
         
         return msg;
     }
